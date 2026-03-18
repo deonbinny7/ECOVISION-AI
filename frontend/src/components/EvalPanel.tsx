@@ -22,8 +22,9 @@ export default function EvalPanel() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    fetch("http://localhost:8000/evaluate")
-      .then((r) => r.json())
+    const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+    fetch(`${API_URL}/evaluate`)
+      .then(res => res.json())
       .then((d) => {
         if (d.error) setError(d.error + (d.hint ? `\n${d.hint}` : ""));
         else setData(d);

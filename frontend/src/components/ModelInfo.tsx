@@ -20,8 +20,9 @@ export default function ModelInfo() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch("http://localhost:8000/model-info")
-      .then((r) => r.json())
+    const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+    fetch(`${API_URL}/model-info`)
+      .then(res => res.json())
       .then((d) => { setData(d); setLoading(false); })
       .catch(() => setLoading(false));
   }, []);

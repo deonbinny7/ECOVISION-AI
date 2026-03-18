@@ -32,7 +32,6 @@ export default function Dashboard() {
     const [gradcam, setGradcam] = useState<string | null>(null);
     const [showResult, setShowResult] = useState(false);
     const [showHeatmap, setShowHeatmap] = useState(false);
-
     const startAnalysis = async (selectedFile: File) => {
         setIsAnalyzing(true);
         setPrediction(null);
@@ -43,11 +42,13 @@ export default function Dashboard() {
         const formData = new FormData();
         formData.append("file", selectedFile);
 
+        const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+
         try {
             // Fire both requests in parallel
             const [predRes, explainRes] = await Promise.all([
-                fetch("http://localhost:8000/predict", { method: "POST", body: formData }),
-                fetch("http://localhost:8000/explain", { method: "POST", body: (() => { const fd = new FormData(); fd.append("file", selectedFile); return fd; })() }),
+                fetch(`${API_URL}/predict`, { method: "POST", body: formData }),
+                fetch(`${API_URL}/explain`, { method: "POST", body: (() => { const fd = new FormData(); fd.append("file", selectedFile); return fd; })() }),
             ]);
 
             if (predRes.ok) setPrediction(await predRes.json());
