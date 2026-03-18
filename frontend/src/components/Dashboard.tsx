@@ -26,7 +26,6 @@ interface PredictionResult {
 
 export default function Dashboard() {
     const [preview, setPreview] = useState<string | null>(null);
-    const [originalFile, setOriginalFile] = useState<File | null>(null);
     const [isAnalyzing, setIsAnalyzing] = useState(false);
     const [prediction, setPrediction] = useState<PredictionResult | null>(null);
     const [gradcam, setGradcam] = useState<string | null>(null);
@@ -65,16 +64,16 @@ export default function Dashboard() {
     const onDrop = (e: React.DragEvent) => {
         e.preventDefault();
         const f = e.dataTransfer.files[0];
-        if (f && f.type.startsWith("image/")) { setOriginalFile(f); setPreview(URL.createObjectURL(f)); startAnalysis(f); }
+        if (f && f.type.startsWith("image/")) { setPreview(URL.createObjectURL(f)); startAnalysis(f); }
     };
 
     const onFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const f = e.target.files?.[0];
-        if (f) { setOriginalFile(f); setPreview(URL.createObjectURL(f)); startAnalysis(f); }
+        if (f) { setPreview(URL.createObjectURL(f)); startAnalysis(f); }
     };
 
     const reset = () => {
-        setPreview(null); setOriginalFile(null); setIsAnalyzing(false);
+        setPreview(null); setIsAnalyzing(false);
         setPrediction(null); setGradcam(null); setShowResult(false); setShowHeatmap(false);
     };
 
@@ -153,6 +152,7 @@ export default function Dashboard() {
                             {/* Image + Grad-CAM Toggle */}
                             <div className="flex-1 flex flex-col gap-3">
                                 <div className="glass-card overflow-hidden h-[320px] relative group">
+                                    {/* eslint-disable-next-line @next/next/no-img-element */}
                                     <img
                                         src={showHeatmap && gradcam ? gradcam : preview!}
                                         alt="Input"
