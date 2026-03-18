@@ -73,7 +73,6 @@ frontend/build/
 dataset/
 GARBAGE CLASSIFICATION/
 dataset.zip
-*.h5
 *.keras
 *.pt
 *.pth
